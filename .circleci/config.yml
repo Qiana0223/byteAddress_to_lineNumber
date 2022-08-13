@@ -1,10 +1,10 @@
 defaults: &defaults
   docker:
-    # TODO: Try to replace this with `mythril/mythx-ci` image. That image is
+    # TODO: Try to replace this with `batin/mythx-ci` image. That image is
     # used for new integration testing, and it is build on top of the previous
-    # `mythril/dev_test_environment:0.0.43`, though a bit newer versions, thus
+    # `batin/dev_test_environment:0.0.43`, though a bit newer versions, thus
     # there is a chance that it breaks some small things.
-    - image: mythril/mythril-ci
+    - image: batin/batin-ci
 
 version: 2
 jobs:
@@ -13,26 +13,26 @@ jobs:
     <<: *defaults
     steps:
       - checkout:
-          path: /home/mythril
+          path: /home/batin
 
       # Uncomment, for local testing with circleci command, as it ignores
       # path param in checkout command, and this symlink compenstates for that.
-      # - run: ln -s /root/project /home/mythril
+      # - run: ln -s /root/project /home/batin
 
       - restore-cache:
           keys:
-            - tox-env-{{ checksum "/home/mythril/setup.py" }}
+            - tox-env-{{ checksum "/home/batin/setup.py" }}
 
       - run:
           name: Install tox envs
           command: tox -vv --notest
-          working_directory: /home/mythril
+          working_directory: /home/batin
           environment:
             LC_ALL: en_US.ASCII
             LANG: en_US.ASCII
 
       - save_cache:
-          key: tox-env-{{ checksum "/home/mythril/setup.py" }}
+          key: tox-env-{{ checksum "/home/batin/setup.py" }}
           paths: 
             - .tox/py*
             - /root/.cache/pip/wheels/
@@ -51,27 +51,27 @@ jobs:
       - run:
           name: Unit-testing
           command: tox
-          working_directory: /home/mythril
+          working_directory: /home/batin
           no_output_timeout: 10m
           environment:
             LANG: en_US.ASCII
-            MYTHRIL_DIR: '/home/mythril'
+            MYTHRIL_DIR: '/home/batin'
             INFURA_ID: $INFURA_ID
 
       - store_test_results:
-          path: /home/mythril/.tox/output
+          path: /home/batin/.tox/output
 
       - store_artifacts:
-          path: /home/mythril/.tox/output
+          path: /home/batin/.tox/output
 
       - run:
           name: Ensuring that setup script is functional
           command: python3 setup.py install
-          working_directory: /home/mythril
+          working_directory: /home/batin
 
       - run:
           name: Sonar analysis
-          command: if [ -z "$CIRCLE_PR_NUMBER" ]; then if [ -z "$CIRCLE_TAG" ]; then sonar-scanner -Dsonar.projectKey=$SONAR_PROJECT_KEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.branch.name=$CIRCLE_BRANCH -Dsonar.projectBaseDir=/home/mythril -Dsonar.sources=mythril -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.tests=/home/mythril/tests -Dsonar.login=$SONAR_LOGIN; fi; fi
+          command: if [ -z "$CIRCLE_PR_NUMBER" ]; then if [ -z "$CIRCLE_TAG" ]; then sonar-scanner -Dsonar.projectKey=$SONAR_PROJECT_KEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.branch.name=$CIRCLE_BRANCH -Dsonar.projectBaseDir=/home/batin -Dsonar.sources=batin -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.tests=/home/batin/tests -Dsonar.login=$SONAR_LOGIN; fi; fi
 
       # - run:
       #     name: Integration tests
@@ -98,7 +98,7 @@ jobs:
 #              docker build \
 #                --build-arg AWS_ACCESS_KEY_ID=$S3_AWS_ACCESS_KEY_ID \
 #                --build-arg AWS_SECRET_ACCESS_KEY=$S3_AWS_SECRET_ACCESS_KEY \
-#                --build-arg AWS_DEFAULT_REGION=us-east-1 --rm -t "edelweiss-mythril:latest" . -f Edelweiss/dockerfiles/mythril/Dockerfile
+#                --build-arg AWS_DEFAULT_REGION=us-east-1 --rm -t "edelweiss-batin:latest" . -f Edelweiss/dockerfiles/batin/Dockerfile
 #      - run:
 #          name: Run Edelweiss
 #          command: |
@@ -109,12 +109,12 @@ jobs:
 #                -e CIRCLE_BUILD_URL=$CIRCLE_BUILD_URL \
 #                -e CIRCLE_WEBHOOK_URL=$CIRCLE_WEBHOOK_URL \
 #                -e MONGO_URL=$MONGO_URL \
-#                --rm edelweiss-mythril:latest \
+#                --rm edelweiss-batin:latest \
 #                --timeout 90 \
 #                --output-dir /opt/edelweiss \
 #                --s3 \
 #                --dynamodb \
-#                --circle-ci CircleCI/mythril.csv \
+#                --circle-ci CircleCI/batin.csv \
 #                --ignore-false-positives $IGNORE_FALSE_POSITIVES \
 #                --ignore-regressions $IGNORE_REGRESSIONS
 
@@ -122,21 +122,21 @@ jobs:
     <<: *defaults
     steps:
       - checkout:
-          path: /home/mythril
+          path: /home/batin
       - run:
           name: Verify Git tag vs. version
           command: python3 setup.py verify
-          working_directory: /home/mythril
+          working_directory: /home/batin
       - run:
           name: Build
           command: python3 setup.py sdist
-          working_directory: /home/mythril
+          working_directory: /home/batin
       - run:
           name: Deploy
           command: twine upload dist/*
-          working_directory: /home/mythril
+          working_directory: /home/batin
 
-  # Release of the mainstream (current stable) version as mythril/myth
+  # Release of the mainstream (current stable) version as batin/map
   # container.
   dockerhub_release:
     docker:
@@ -146,9 +146,9 @@ jobs:
       - setup_remote_docker
       - run:
           name: Building Docker Image
-          command: ./docker_build_and_deploy.sh mythril/myth
+          command: ./docker_build_and_deploy.sh batin/map
 
-  # Release of the latest development version as mythril/myth-dev container.
+  # Release of the latest development version as batin/map-dev container.
   dockerhub_dev_release:
     docker:
       - image: docker:stable
@@ -157,7 +157,7 @@ jobs:
       - setup_remote_docker
       - run:
           name: Building Docker Image
-          command: ./docker_build_and_deploy.sh mythril/myth-dev
+          command: ./docker_build_and_deploy.sh batin/map-dev
 
 workflows:
   version: 2

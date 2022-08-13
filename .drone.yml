@@ -36,12 +36,12 @@ steps:
     - git submodule update --remote --recursive
     # run edelewiss tests
     - edelweiss-cli 
-      -p mythril 
+      -p batin
       --timeout 90 
       --output-dir $(pwd) 
       --s3 
       --dynamodb 
-      --circle-ci CircleCI/mythril.csv 
+      --circle-ci CircleCI/batin.csv
       --ignore-false-positives $IGNORE_FALSE_POSITIVES 
       --ignore-regressions $IGNORE_REGRESSIONS
   when:

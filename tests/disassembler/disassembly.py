@@ -1,4 +1,4 @@
-from mythril.disassembler.disassembly import *
+from batin.disassembler.disassembly import *
 
 instruction_list = [
     {"opcode": "PUSH4", "argument": "0x10203040"},

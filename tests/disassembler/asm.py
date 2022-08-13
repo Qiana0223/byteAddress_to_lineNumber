@@ -1,4 +1,4 @@
-from mythril.disassembler.asm import *
+from batin.disassembler.asm import *
 import pytest
 
 valid_names = [("PUSH1", 0x60), ("STOP", 0x0), ("RETURN", 0xF3)]

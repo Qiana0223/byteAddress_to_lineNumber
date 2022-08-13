@@ -1,4 +1,4 @@
-from mythril.ethereum.evmcontract import EVMContract
+from batin.EVMContract import EVMContract
 from tests import BaseTestCase
 
 

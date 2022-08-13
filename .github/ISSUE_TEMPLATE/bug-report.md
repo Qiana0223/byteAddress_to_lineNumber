@@ -20,7 +20,7 @@ output you got in describing how to reproduce the bug.
 For example:
 
 ```console
-$ myth <command-line-options>
+$ map <command-line-options>
 ==== Exception state ====
 Type: ...
 Contract: ...
@@ -60,7 +60,7 @@ If applicable, add screenshots to help explain your problem.
 
 Please modify for your setup
 
-- Mythril version: output from  `myth --version` or `pip show mythril`
+- Mythril version: output from  `map --version` or `pip show batin`
 - Solidity compiler and version: `solc --version`
 - Python version: `python -V`
 - OS and Version: [e.g. Mac OS High Sierra]

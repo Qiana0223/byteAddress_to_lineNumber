@@ -1,5 +1,5 @@
-from mythril.disassembler.disassembly import Disassembly
-from mythril.ethereum import util
+from batin.disassembler.disassembly import Disassembly
+from batin import util
 from tests import *
 
 

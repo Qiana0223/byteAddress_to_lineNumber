@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""install mythril and deploy source-dist and wheel to pypi.python.org.
+"""install batin and deploy source-dist and wheel to pypi.python.org.
 
 deps (requires up2date version):
     *) pip install --upgrade pip wheel setuptools twine
@@ -14,49 +14,14 @@ import os
 import io
 
 # Package meta-data.
-NAME = "mythril"
-DESCRIPTION = "Security analysis tool for Ethereum smart contracts"
-URL = "https://github.com/ConsenSys/mythril"
-AUTHOR = "ConsenSys Dilligence"
+NAME = "batin"
+DESCRIPTION = "map the byte addresses to the line numbers of the corresponding source code"
+URL = ""
+AUTHOR = "Qiana"
 AUTHOR_MAIL = None
 REQUIRES_PYTHON = ">=3.6.0"
 
 
-# What packages are required for this module to be executed?
-REQUIRED = [
-    "coloredlogs>=10.0",
-    "py_ecc==1.6.0",
-    "ethereum>=2.3.2",
-    "z3-solver>=4.8.8.0",
-    "requests==2.25.0",
-    "py-solc",
-    "py-solc-x==1.0.0",
-    "semantic_version==2.8.5",
-    "numpy==1.19.0",
-    "plyvel",
-    "eth_abi==1.3.0",
-    "eth-account>=0.1.0a2,<=0.3.0",
-    "eth-hash<0.3.0",
-    "eth-keyfile>=0.5.1",
-    "eth-keys>=0.2.0b3,<0.3.0",
-    "eth-rlp>=0.1.0",
-    "eth-tester==0.1.0b32",
-    "eth-typing>=2.0.0",
-    "eth-utils==1.9.0",
-    "coverage",
-    "jinja2>=2.9",
-    "rlp>=1.0.1,<2.0.0",
-    "transaction>=2.2.1",
-    "py-flags",
-    "mock",
-    "configparser>=3.5.0",
-    "persistent>=4.2.0",
-    "ethereum-input-decoder>=0.2.2",
-    "matplotlib",
-    "pythx",
-    "py-evm==0.3.0a13",
-    "certifi>=2020.06.20",
-]
 
 TESTS_REQUIRE = ["mypy", "pytest>=3.6.0", "pytest_mock", "pytest-cov"]
 
@@ -127,12 +92,12 @@ setup(
     ],
     keywords="hacking disassembler security ethereum",
     packages=find_packages(exclude=["contrib", "docs", "tests"]),
-    install_requires=REQUIRED,
+    install_requires=None,
     tests_require=TESTS_REQUIRE,
     python_requires=REQUIRES_PYTHON,
     extras_require=EXTRAS,
-    package_data={"mythril.analysis.templates": ["*"], "mythril.support.assets": ["*"]},
+    package_data={"batin.analysis.templates": ["*"], "batin.support.assets": ["*"]},
     include_package_data=True,
-    entry_points={"console_scripts": ["myth=mythril.interfaces.cli:main"]},
+    entry_points={"console_scripts": ["map=batin.interfaces.cli:main"]},
     cmdclass={"verify": VerifyVersionCommand},
 )
